@@ -1,11 +1,12 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography, Chip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "space-between",
+    alignItems: 'center',
     marginLeft: 20,
     flexGrow: 1,
   },
@@ -24,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     color: "#000",
     letterSpacing: -0.17,
   },
+  chip: {
+    marginRight: 20
+  }
 }));
 
 const ChatContent = (props) => {
@@ -33,6 +37,7 @@ const ChatContent = (props) => {
   const { latestMessageText, otherUser } = conversation;
 
   const unread = conversation.messages.some(message => message.read === false);
+  const unreadCount = conversation.messages.reduce((acc, curr) => acc + !curr.read, 0)
 
   return (
     <Box className={classes.root}>
@@ -44,6 +49,7 @@ const ChatContent = (props) => {
           {latestMessageText}
         </Typography>
       </Box>
+      {unreadCount ? <Chip className={classes.chip} label={unreadCount} color="primary" /> : ''}
     </Box>
   );
 };
