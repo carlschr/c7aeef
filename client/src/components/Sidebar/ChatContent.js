@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
   },
   previewTextUnread: {
     fontSize: 12,
-    fontWeight: "bold",
     color: "#000",
     letterSpacing: -0.17,
   },
