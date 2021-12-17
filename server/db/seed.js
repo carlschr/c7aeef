@@ -32,13 +32,13 @@ async function seed() {
     conversationId: santaigoConvo.id,
     senderId: santiago.id,
     text: "Where are you from?",
-    read: true
+    read: false
   });
   await Message.create({
     conversationId: santaigoConvo.id,
     senderId: thomas.id,
     text: "I'm from New York",
-    read: true
+    read: false
   });
   await Message.create({
     conversationId: santaigoConvo.id,
@@ -62,7 +62,7 @@ async function seed() {
     conversationId: chiumboConvo.id,
     senderId: chiumbo.id,
     text: "Sure! What time?",
-    read: true
+    read: false
   });
 
   const hualing = await User.create({
@@ -82,7 +82,7 @@ async function seed() {
       conversationId: hualingConvo.id,
       senderId: hualing.id,
       text: "a test message",
-      read: true
+      read: false
     });
   }
 
@@ -90,7 +90,7 @@ async function seed() {
     conversationId: hualingConvo.id,
     senderId: hualing.id,
     text: "😂 😂 😂",
-    read: true
+    read: false
   });
 
   const otherUsers = await Promise.all([
