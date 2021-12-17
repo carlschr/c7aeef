@@ -109,6 +109,10 @@ export const postMessage = (body) => (dispatch) => {
   }
 };
 
+export const readMessages = (conversation) => async (dispatch) => {
+  console.log(conversation)
+}
+
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {
     const { data } = await axios.get(`/api/users/${searchTerm}`);
