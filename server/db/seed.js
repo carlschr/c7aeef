@@ -44,7 +44,7 @@ async function seed() {
     conversationId: santaigoConvo.id,
     senderId: santiago.id,
     text: "Share photo of your city, please",
-    read: true
+    read: false
   });
 
   const chiumbo = await User.create({
