@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  setMessagesToRead,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -114,13 +115,21 @@ const updateToRead = async (body) => {
   return data;
 };
 
-export const readMessages = (conversation) => async (dispatch) => {
+const sendReadMessages = (body) => {
+  socket.emit("message-viewed", body);
+};
+
+export const readMessages = (conversation) => async (dispatch, getState) => {
+  if (conversation.messages.every((message) => message.read)) return;
+
   const body = {
     conversationId: conversation.id,
     userId: conversation.otherUser.id
   }
-  if (conversation.messages.every(message => message.read)) return;
-  updateToRead(body);
+
+  await updateToRead(body);
+  dispatch(setMessagesToRead(body.userId));
+  sendReadMessages({...body, userId: getState().user.id});
 };
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
