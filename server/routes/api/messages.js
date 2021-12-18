@@ -59,7 +59,6 @@ router.put("/", async (req, res, next) => {
         read: false
       },
       returning: true,
-      plain: true
     });
     res.json(messages);
   } catch(error) {
