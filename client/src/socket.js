@@ -6,6 +6,7 @@ import {
   addOnlineUser,
   setMessagesToRead
 } from "./store/conversations";
+import { readActiveChat } from "./store/utils/thunkCreators";
 
 const socket = io(window.location.origin);
 
@@ -20,6 +21,7 @@ socket.on("connect", () => {
   });
   socket.on("new-message", (data) => {
     store.dispatch(setNewMessage(data.message, data.sender));
+    store.dispatch(readActiveChat(data.message.senderId));
   });
   socket.on("message-viewed", (data) => {
     store.dispatch(setMessagesToRead(data));
