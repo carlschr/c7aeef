@@ -69,10 +69,10 @@ export const addConversation = (recipientId, newMessage) => {
   };
 };
 
-export const setMessagesToRead = (userId) => {
+export const setMessagesToRead = (body) => {
   return {
     type: READ_MESSAGES,
-    userId
+    payload: body
   };
 };
 
@@ -103,7 +103,8 @@ const reducer = (state = [], action) => {
     case READ_MESSAGES:
       return readConvoMessages(
         state,
-        action.userId
+        action.payload.userId,
+        action.payload.conversationId
       );
     default:
       return state;

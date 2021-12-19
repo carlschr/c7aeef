@@ -119,17 +119,21 @@ const sendReadMessages = (body) => {
   socket.emit("message-viewed", body);
 };
 
-export const readMessages = (conversation) => async (dispatch, getState) => {
+export const readMessages = (conversation) => async (dispatch) => {
   if (conversation.messages.every((message) => message.read)) return;
 
-  const body = {
-    conversationId: conversation.id,
-    userId: conversation.otherUser.id
+  try {
+    const body = {
+      conversationId: conversation.id,
+      userId: conversation.otherUser.id
+    };
+  
+    await updateToRead(body);
+    dispatch(setMessagesToRead(body));
+    sendReadMessages(body);
+  } catch (error) {
+    console.error(error);
   }
-
-  await updateToRead(body);
-  dispatch(setMessagesToRead(body.userId));
-  sendReadMessages({...body, userId: getState().user.id});
 };
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
