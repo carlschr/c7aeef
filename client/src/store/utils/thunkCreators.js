@@ -120,7 +120,13 @@ const sendReadMessages = (body) => {
 };
 
 export const readMessages = (conversation) => async (dispatch) => {
-  if (conversation.messages.every((message) => message.read)) return;
+  const allRead = conversation.messages.every((message) => {
+    return (message.senderId === conversation.otherUser.id) ? 
+            message.read : 
+            true;
+  });
+
+  if (allRead) return;
 
   try {
     const body = {
