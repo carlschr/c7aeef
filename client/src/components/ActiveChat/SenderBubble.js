@@ -24,18 +24,27 @@ const useStyles = makeStyles(() => ({
   bubble: {
     background: "#F4F6FA",
     borderRadius: "10px 10px 0 10px"
+  },
+  avatar: {
+    borderRadius: "50%",
+    width: 20,
+    height: 20,
+    marginTop: 10
   }
 }));
 
 const SenderBubble = (props) => {
   const classes = useStyles();
-  const { time, text } = props;
+  const { time, text, lastRead, photo } = props;
   return (
     <Box className={classes.root}>
       <Typography className={classes.date}>{time}</Typography>
       <Box className={classes.bubble}>
         <Typography className={classes.text}>{text}</Typography>
       </Box>
+      {lastRead ? 
+        <img className={classes.avatar} src={photo} alt="last-read message indicator"/> : ""
+      }
     </Box>
   );
 };
