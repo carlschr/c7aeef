@@ -142,17 +142,6 @@ export const readMessages = (conversation) => async (dispatch) => {
   }
 };
 
-export const readActiveChat = (sender) => async (dispatch, getState) => {
-  try {
-    const convo = getState().conversations.find(conv => conv.otherUser.id === sender);
-    if (convo.otherUser.username === getState().activeConversation) {
-      dispatch(readMessages(convo));
-    };
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {
     const { data } = await axios.get(`/api/users/${searchTerm}`);
