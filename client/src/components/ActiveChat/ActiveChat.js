@@ -30,8 +30,7 @@ const ActiveChat = (props) => {
   const { activeConversation } = props;
 
   useEffect(() => {
-    if (!messages) return;
-    props.readMessages(props.conversation);
+    if (messages) props.readMessages(props.conversation);
   }, [messages, props, activeConversation]);
 
   return (

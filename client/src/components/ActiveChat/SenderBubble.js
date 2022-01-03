@@ -42,8 +42,8 @@ const SenderBubble = (props) => {
       <Box className={classes.bubble}>
         <Typography className={classes.text}>{text}</Typography>
       </Box>
-      {lastRead ? 
-        <img className={classes.avatar} src={photo} alt="last-read message indicator"/> : ""
+      {lastRead && 
+        <img className={classes.avatar} src={photo} alt="last-read message indicator"/>
       }
     </Box>
   );
