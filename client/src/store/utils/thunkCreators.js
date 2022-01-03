@@ -119,7 +119,7 @@ const sendReadMessages = (body) => {
   socket.emit("message-viewed", body);
 };
 
-export const readMessages = (conversation) => async (dispatch) => {
+export const readMessages = (conversation) => async (dispatch, getState) => {
   const allRead = conversation.messages.every((message) => {
     return (message.senderId === conversation.otherUser.id) ? 
             message.read : 
@@ -131,7 +131,8 @@ export const readMessages = (conversation) => async (dispatch) => {
   try {
     const body = {
       conversationId: conversation.id,
-      userId: conversation.otherUser.id
+      otherId: conversation.otherUser.id,
+      userId: getState().user.id
     };
   
     await updateToRead(body);

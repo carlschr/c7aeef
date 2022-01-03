@@ -44,18 +44,23 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// expects { conversationId, userId } in body
+// expects { conversationId, userId, otherId } in body
 router.put("/", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
-    }
+    };
 
-    const { userId, conversationId } = req.body;
+    const { userId, otherId, conversationId } = req.body;
+
+    if (req.user.id !== userId && req.user.id !== otherId) {
+      return res.sendStatus(401);
+    };
+
     const messages = await Message.update({read: true}, {
       where: {
         conversationId: conversationId,
-        senderId: userId,
+        senderId: otherId,
         read: false
       },
       returning: true,

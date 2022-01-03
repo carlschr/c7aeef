@@ -103,7 +103,7 @@ const reducer = (state = [], action) => {
     case READ_MESSAGES:
       return readConvoMessages(
         state,
-        action.payload.userId,
+        action.payload.otherId,
         action.payload.conversationId
       );
     default:
