@@ -35,14 +35,8 @@ const useStyles = makeStyles((theme) => ({
 const ChatContent = (props) => {
   const classes = useStyles();
 
-  const { conversation } = props;
+  const { conversation, unread, unreadCount } = props;
   const { latestMessageText, otherUser } = conversation;
-
-  const unread = conversation.messages.some(message => message.read === false && message.senderId === otherUser.id);
-  const unreadCount = unread ? conversation.messages.reduce((acc, curr) => {
-    if (curr.senderId !== otherUser.id) return acc;
-    return acc + !curr.read;
-  }, 0) : 0;
 
   return (
     <Box className={classes.root}>

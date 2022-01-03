@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,8 +25,26 @@ const Chat = (props) => {
   const { conversation } = props;
   const { otherUser } = conversation;
 
+  const getUnread = () => {
+    return conversation.messages.some(message => message.read === false && message.senderId === otherUser.id);
+  };
+
+  const getCount = () => {
+    const reducerFunc = (acc, curr) => {
+      if (curr.senderId !== otherUser.id) return acc;
+      return acc + !curr.read;
+    };
+
+    return unread ? conversation.messages.reduce(reducerFunc, 0) : 0;
+  };
+
+  const [unread, setUnread] = useState(getUnread());
+  const [unreadCount, setUnreadCount] = useState(getCount());
+
   const handleClick = async (conversation) => {
     await props.setActiveChat(conversation.otherUser.username);
+    setUnread(false);
+    setUnreadCount(0);
   };
 
   return (
@@ -36,7 +55,11 @@ const Chat = (props) => {
         online={otherUser.online}
         sidebar={true}
       />
-      <ChatContent conversation={conversation} />
+      <ChatContent 
+        conversation={conversation} 
+        unread={unread} 
+        unreadCount={unreadCount} 
+      />
     </Box>
   );
 };
