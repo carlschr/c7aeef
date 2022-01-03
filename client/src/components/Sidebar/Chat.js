@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { makeStyles } from "@material-ui/core/styles";
@@ -29,17 +28,26 @@ const Chat = (props) => {
     return conversation.messages.some(message => message.read === false && message.senderId === otherUser.id);
   };
 
-  const getCount = () => {
+  const getCount = (isUnread) => {
     const reducerFunc = (acc, curr) => {
       if (curr.senderId !== otherUser.id) return acc;
       return acc + !curr.read;
     };
 
-    return unread ? conversation.messages.reduce(reducerFunc, 0) : 0;
+    const count = isUnread ? conversation.messages.reduce(reducerFunc, 0) : 0;
+    return count;
   };
 
   const [unread, setUnread] = useState(getUnread());
-  const [unreadCount, setUnreadCount] = useState(getCount());
+  const [unreadCount, setUnreadCount] = useState(getCount(unread));
+
+  useEffect(() => {
+    const newUnread = getUnread();
+    const newCount = getCount(newUnread);
+
+    setUnread(newUnread);
+    setUnreadCount(newCount);
+  }, [conversation])
 
   const handleClick = async (conversation) => {
     await props.setActiveChat(conversation.otherUser.username);
