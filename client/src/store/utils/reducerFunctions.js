@@ -86,7 +86,7 @@ export const readConvoMessages = (state, userId, conversationId) => {
     if (convo.id === conversationId) {
       const convoCopy = { 
         ...convo, 
-        messages: convo.messages.map((msg) => {return {...msg}})
+        messages: convo.messages.map((msg) => ({...msg}))
       };
       convoCopy.messages.forEach((msg) => {
           if (!msg.read && msg.senderId === userId) msg.read = true;
