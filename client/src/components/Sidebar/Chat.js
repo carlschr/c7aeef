@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,14 +21,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Chat = (props) => {
   const classes = useStyles();
-  const { conversation } = props;
+  const { conversation } = useMemo(() => props, [props]);
   const { otherUser } = conversation;
 
-  const getUnread = () => {
+  const getUnread = useCallback(() => {
     return conversation.messages.some(message => message.read === false && message.senderId === otherUser.id);
-  };
+  }, [conversation.messages, otherUser.id]);
 
-  const getCount = (isUnread) => {
+  const getCount = useCallback((isUnread) => {
     const reducerFunc = (acc, curr) => {
       if (curr.senderId !== otherUser.id) return acc;
       return acc + !curr.read;
@@ -36,10 +36,14 @@ const Chat = (props) => {
 
     const count = isUnread ? conversation.messages.reduce(reducerFunc, 0) : 0;
     return count;
-  };
+  }, [conversation.messages, otherUser.id]);
 
-  const [unread, setUnread] = useState(getUnread());
-  const [unreadCount, setUnreadCount] = useState(getCount(unread));
+  const [unread, setUnread] = useState(() => {
+    return getUnread();
+  });
+  const [unreadCount, setUnreadCount] = useState(() => {
+    return getCount(unread);
+  });
 
   useEffect(() => {
     const newUnread = getUnread();
@@ -47,7 +51,7 @@ const Chat = (props) => {
 
     setUnread(newUnread);
     setUnreadCount(newCount);
-  }, [conversation])
+  }, [conversation, getCount, getUnread])
 
   const handleClick = async (conversation) => {
     await props.setActiveChat(conversation.otherUser.username);
