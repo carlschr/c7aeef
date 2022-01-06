@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useMemo, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 import { Input, Header, Messages } from "./index";
 import { connect } from "react-redux";
-import { useEffect } from "react";
 import { readMessages } from "../../store/utils/thunkCreators";
 
 const useStyles = makeStyles(() => ({
@@ -25,13 +24,13 @@ const useStyles = makeStyles(() => ({
 const ActiveChat = (props) => {
   const classes = useStyles();
   const { user } = props;
-  const conversation = props.conversation || {};
+  const conversation = useMemo(() => props.conversation || {}, [props.conversation]);
   const { messages } = conversation;
-  const { activeConversation } = props;
+  const { activeConversation, readMessages } = props;
 
   useEffect(() => {
-    if (messages) props.readMessages(props.conversation);
-  }, [messages, props, activeConversation]);
+    if (messages) readMessages(conversation);
+  }, [messages, readMessages, conversation, activeConversation]);
 
   return (
     <Box className={classes.root}>
