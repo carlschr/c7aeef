@@ -53,7 +53,7 @@ router.put("/", async (req, res, next) => {
     const { userId, otherId, conversationId } = req.body;
 
     if (req.user.id !== userId && req.user.id !== otherId) {
-      return res.sendStatus(401);
+      return res.sendStatus(403);
     };
 
     const messages = await Message.update({read: true}, {
@@ -64,7 +64,7 @@ router.put("/", async (req, res, next) => {
       },
       returning: true,
     });
-    res.json(messages);
+    return res.sendStatus(204);
   } catch(error) {
     next(error);
   }
