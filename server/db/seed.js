@@ -23,28 +23,29 @@ async function seed() {
       "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/775db5e79c5294846949f1f55059b53317f51e30_s3back.png",
   });
 
-  const santaigoConvo = await Conversation.create({
-    user1Id: thomas.id,
-    user2Id: santiago.id,
+  // Santiago and Thomas
+  const santiagoConvo = await Conversation.create({});
+  santiago.addConversation(santiagoConvo);
+  thomas.addConversation(santiagoConvo);
+
+  await Message.create({
+    conversationId: santiagoConvo.id,
+    senderId: santiago.id,
+    text: "Where are you from?"
   });
 
   await Message.create({
-    conversationId: santaigoConvo.id,
-    senderId: santiago.id,
-    text: "Where are you from?",
-    read: true
-  });
-  await Message.create({
-    conversationId: santaigoConvo.id,
+    conversationId: santiagoConvo.id,
     senderId: thomas.id,
-    text: "I'm from New York",
-    read: true
+    text: "I'm from New York"
   });
-  await Message.create({
-    conversationId: santaigoConvo.id,
+
+  const unreadMsg = await Message.create({
+    conversationId: santiagoConvo.id,
     senderId: santiago.id,
     text: "Share photo of your city, please",
   });
+  thomas.addMessage(unreadMsg);
 
   const chiumbo = await User.create({
     username: "chiumbo",
@@ -53,15 +54,16 @@ async function seed() {
     photoUrl:
       "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914468/messenger/8bc2e13b8ab74765fd57f0880f318eed1c3fb001_fownwt.png",
   });
-  const chiumboConvo = await Conversation.create({
-    user1Id: chiumbo.id,
-    user2Id: thomas.id,
-  });
-  await Message.create({
+  // Thomas and Chiumbo
+  const chiumboConvo = await Conversation.create({});
+  chiumbo.addConversation(chiumboConvo);
+  thomas.addConversation(chiumboConvo);
+  const unreadMsg2 = await Message.create({
     conversationId: chiumboConvo.id,
     senderId: chiumbo.id,
     text: "Sure! What time?",
   });
+  thomas.addMessage(unreadMsg2);
 
   const hualing = await User.create({
     username: "hualing",
@@ -70,27 +72,28 @@ async function seed() {
     photoUrl:
       "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/6c4faa7d65bc24221c3d369a8889928158daede4_vk5tyg.png",
   });
-  const hualingConvo = await Conversation.create({
-    user2Id: hualing.id,
-    user1Id: thomas.id,
-  });
+  // Thomas and Hualing
+  const hualingConvo = await Conversation.create();
+  hualing.addConversation(hualingConvo);
+  thomas.addConversation(hualingConvo);
 
   for (let i = 0; i < 11; i++) {
-    await Message.create({
+    const unreadMsg3 = await Message.create({
       conversationId: hualingConvo.id,
       senderId: hualing.id,
       text: "a test message",
     });
-  }
+    thomas.addMessage(unreadMsg3);
+  };
 
-  await Message.create({
+  const unreadMsg4 = await Message.create({
     conversationId: hualingConvo.id,
     senderId: hualing.id,
     text: "😂 😂 😂",
   });
+  thomas.addMessage(unreadMsg4);
 
   const otherUsers = await Promise.all([
-    ,
     User.create({
       username: "ashanti",
       email: "ashanti@email.com",
